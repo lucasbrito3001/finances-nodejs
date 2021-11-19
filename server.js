@@ -1,13 +1,15 @@
-const app = require('./src/app')
+require('module-alias/register');
 require('dotenv').config()
 
-const port = process.env.PORT
+const app = require('@app');
 
-app.listen(port, (err) => {
+const config = require('./src/config/index')
+
+app.listen(config.port, (err) => {
     app.get('/', (req, res) => {
         res.send('Hello World!')
     })
     
     if(err) return console.log(err);
-    console.log(`The app is running at http://localhost:${port}`)
+    console.log(`The app is running at http://localhost:${config.port}`)
 })
