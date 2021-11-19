@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-router.post('/login', (req, res) => {
-    res.json(req.body)
-})
+const accountsController = require('@controllers/accounts')
+
+router.post('/login', accountsController.login)
 
 router.post('/register', (req, res) => {
     res.json(req.body)

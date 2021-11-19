@@ -37,6 +37,8 @@
   },
   "_moduleAliases": {
     "@root": "src",
-    "@app": "src/app.js"
+    "@app": "src/app.js",
+    "@config": "src/config",
+    "@controllers": "src/controllers"
   }
 }
