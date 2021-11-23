@@ -31,6 +31,7 @@
     "express-group-routes": "^1.1.0",
     "module-alias": "^2.2.2",
     "morgan": "^1.10.0",
+    "mysql2": "^2.3.3",
     "nodemon": "^2.0.15",
     "postgres": "^1.0.2",
     "sequelize": "^6.11.0"
@@ -39,6 +40,8 @@
     "@root": "src",
     "@app": "src/app.js",
     "@config": "src/config",
-    "@controllers": "src/controllers"
+    "@controllers": "src/controllers",
+    "@models": "src/models",
+    "@database": "src/config/database.js"
   }
 }

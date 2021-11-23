@@ -1,5 +1,5 @@
 require('module-alias/register');
-require('dotenv').config()
+require('dotenv').config();
 
 const app = require('@app');
 
@@ -7,7 +7,7 @@ const config = require('@config');
 
 app.listen(config.app.port, (err) => {
     app.get('/', (req, res) => {
-        res.send('Hello World!')
+        res.send('Hello World!');
     });
     
     if(err) return console.log(err);
