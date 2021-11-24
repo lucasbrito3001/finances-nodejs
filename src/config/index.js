@@ -1,5 +1,5 @@
 module.exports = {
     app: {
-        port: process.env.PORT || 4100,
+        port: process.env.DB_PORT || 4100,
     }
 }
