@@ -13,7 +13,7 @@ const Account = sqlz.define('accounts', {
     agencyId: { type: Sqlz.INTEGER(4).ZEROFILL, allowNull: false }
 })
 
-Account.sync({ force: true }).then(console.log('The table was created!')).catch(err => console.log(err));
+Account.sync({ force: false }).then(console.log('The table was created!')).catch(err => console.log(err));
 
 module.exports = {
     account: Account
