@@ -4,13 +4,16 @@ const accountsModel = require("@models/accountsModel.js")
 const accountsController = {
     login: async function (req, res) {
         const matchedAccount = await accountsModel.account.findOne({ where: { email: req.body.email, password: req.body.password } });
-        const session = { 
-            accountId: String(matchedAccount.accountId),
-            name: matchedAccount.name,
-            agencyId: matchedAccount.agencyId,
-            phone: matchedAccount.phone
-        };
-        if(matchedAccount.length > 0) {
+        
+        if(!!matchedAccount) {
+
+            const session = { 
+                accountId: String(matchedAccount.accountId),
+                name: matchedAccount.name,
+                agencyId: matchedAccount.agencyId,
+                phone: matchedAccount.phone
+            };
+            
             return res.status(200).json({
                 status: 200,
                 data: [session],
