@@ -10,7 +10,7 @@ const accountsController = {
             agencyId: matchedAccount.agencyId,
             phone: matchedAccount.phone
         };
-        if(matchedAccount) {
+        if(matchedAccount.length > 0) {
             return res.status(200).json({
                 status: 200,
                 data: [session],
