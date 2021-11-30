@@ -22,7 +22,7 @@ const transactionsController = {
         } catch (error) {
             return res.status(404).json({
                 status: 404,
-                data: matchedTransactions,
+                data: [],
                 message: `Nenhuma transação encontrada.`,
                 result: "empty",
                 error: null
