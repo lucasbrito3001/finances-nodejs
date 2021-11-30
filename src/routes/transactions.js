@@ -7,6 +7,6 @@ router.get('/filter/account', transactionsController.getTransactions)
 
 router.post('/new', transactionsController.createTransaction)
 
-router.put('/confirm', transactionsController.confirmTransaction)
+router.put('/confirm', transactionsController.completeTransaction)
 
 module.exports = router;
