@@ -57,14 +57,17 @@ const transactionsController = {
 
         try {
             const itemToUpdate = await transactionsModel.transaction.findOne({ where: { id: req.query.transactionId} });
+            if(itemToUpdate.typeTransaction !== 1 && (req.query.confirmerId != itemToUpdate.accountIdSender)) throw {message: "Possível fraude identificada", error: 'id of confirmer is wrong'};
+            if(itemToUpdate.transactionStatus !== 'pending') throw {message: "O status desta transação ja foi decidido.", error: 'transaction already completed'}
+
             itemToUpdate.transactionStatus = "completed";
             await itemToUpdate.save();
         } catch (err) {
             status = 400;
             data = [];
-            message = "Este id de transação não existe";
+            message = err.message || "Este id de transação não existe";
             result = "error";
-            error = "invalid id";
+            error = err.error || "invalid id";
         }
         
         return res.status(status).json({
