@@ -3,21 +3,31 @@ const { Op } = require('sequelize');
 
 const transactionsController = {
     getTransactions: async function (req, res) {
-        const matchedTransactions = await transactionsModel.transaction.findAll({
-            where: {
-                [Op.or]: [
-                    { accountIdSender: req.query.accountId },
-                    { accountIdRecipient: req.query.accountId }
-                ]
-            }
-        });
-        return res.status(200).json({
-            status: 200,
-            data: matchedTransactions,
-            message: `Foram encontradas ${matchedTransactions.length} transações.`,
-            result: "success",
-            error: null
-        });
+        try {
+            const matchedTransactions = await transactionsModel.transaction.findAll({
+                where: {
+                    [Op.or]: [
+                        { accountIdSender: req.query.accountId },
+                        { accountIdRecipient: req.query.accountId }
+                    ]
+                }
+            });
+            return res.status(200).json({
+                status: 200,
+                data: matchedTransactions,
+                message: `Foram encontradas ${matchedTransactions.length} transações.`,
+                result: "success",
+                error: null
+            });
+        } catch (error) {
+            return res.status(404).json({
+                status: 404,
+                data: matchedTransactions,
+                message: `Nenhuma transação encontrada.`,
+                result: "empty",
+                error: null
+            });
+        }
     },
 
     createTransaction: async function (req, res) {
