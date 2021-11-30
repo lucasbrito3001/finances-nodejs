@@ -28,7 +28,7 @@ const transactionsController = {
         let error = null;
         try {
             let payload = req.body;
-            payload.transactionStatus = req.body.typeTransaction === 1 ? "pending" : "completed";
+            payload.transactionStatus = (req.body.typeTransaction === 1 || req.body.typeTransaction === 3) ? "pending" : "completed";
             await transactionsModel.transaction.create(payload);
         } catch (err) {
             status = 400;
@@ -48,7 +48,7 @@ const transactionsController = {
         });
     },
 
-    confirmTransaction: async function (req, res) {
+    completeTransaction: async function (req, res) {
         let status = 200;
         let data = [];
         let message = "Transação confirmada!";
