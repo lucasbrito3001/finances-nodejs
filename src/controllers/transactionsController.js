@@ -2,6 +2,27 @@ const transactionsModel = require("@models/transactionsModel.js");
 const { Op } = require('sequelize');
 
 const transactionsController = {
+    getAllTransactions: async function (req, res) {
+        try {
+            const allTransactions = await transactionsModel.transaction.findAll();
+            return res.status(200).json({
+                status: 200,
+                data: allTransactions,
+                message: `Foram encontradas ${allTransactions.length} transações.`,
+                result: "success",
+                error: null
+            });
+        } catch (error) {
+            return res.status(404).json({
+                status: 404,
+                data: [],
+                message: `Houve algum erro na requisição.`,
+                result: "error",
+                error: null
+            });
+        }
+    },
+
     getTransactions: async function (req, res) {
         try {
             const matchedTransactions = await transactionsModel.transaction.findAll({
@@ -38,7 +59,7 @@ const transactionsController = {
         let error = null;
         try {
             let payload = req.body;
-            payload.transactionStatus = (req.body.typeTransaction === 1 || req.body.typeTransaction === 3) ? "pending" : "completed";
+            payload.transactionStatus = (req.body.typeTransaction !== 2) ? "pending" : "completed";
             await transactionsModel.transaction.create(payload);
         } catch (err) {
             status = 400;
@@ -66,11 +87,11 @@ const transactionsController = {
         let error = null;
 
         try {
-            const itemToUpdate = await transactionsModel.transaction.findOne({ where: { id: req.query.transactionId} });
-            if(itemToUpdate.typeTransaction !== 1 && (req.query.confirmerId != itemToUpdate.accountIdSender)) throw {message: "Possível fraude identificada", error: 'id of confirmer is wrong'};
-            if(itemToUpdate.transactionStatus !== 'pending') throw {message: "O status desta transação ja foi decidido.", error: 'transaction already completed'}
-
-            itemToUpdate.transactionStatus = "completed";
+            const itemToUpdate = await transactionsModel.transaction.findOne({ where: { id: req.query.transactionId } });
+            if ((itemToUpdate.typeTransaction !== 1 && itemToUpdate.typeTransaction !== 4) && (req.query.confirmerId != itemToUpdate.accountIdSender) && req.query.isCancel === 'false') throw { message: "Possível fraude identificada", error: 'id of confirmer is wrong' };
+            if (itemToUpdate.transactionStatus !== 'pending') throw { message: "O status desta transação ja foi decidido.", error: 'transaction already completed' }
+            console.log(typeof req.query.isCancel)
+            itemToUpdate.transactionStatus = req.query.isCancel === 'true' ? "declined" : "completed";
             await itemToUpdate.save();
         } catch (err) {
             status = 400;
@@ -79,7 +100,7 @@ const transactionsController = {
             result = "error";
             error = err.error || "invalid id";
         }
-        
+
         return res.status(status).json({
             status: status,
             data: data,
