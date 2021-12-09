@@ -11,5 +11,5 @@ app.listen(config.app.port, (err) => {
     });
     
     if(err) return console.log(err);
-    console.log(`The app is running at http://localhost:${config.app.port}`);
+    console.log(`The api is running at http://localhost:${config.app.port}`);
 });
