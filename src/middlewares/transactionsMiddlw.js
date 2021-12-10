@@ -7,7 +7,13 @@ const middlewares = {
             else if(next.transactionId === 3) prev - next.amount
         }, 0)
         if(userBalance >= newTransaction.amount) return
-        else return res.json()
+        else return res.status(406).json({
+            status: 406,
+            data: [],
+            message: "Você não tem saldo suficiente para realizar esta transação",
+            result: 'error',
+            error: "user don't have money to make this transaction"
+        });
     }
 }
 

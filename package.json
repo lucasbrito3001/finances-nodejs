@@ -43,6 +43,7 @@
     "@config": "src/config",
     "@controllers": "src/controllers",
     "@models": "src/models",
-    "@database": "src/config/database.js"
+    "@database": "src/config/database.js",
+    "@middlewares": "src/middlewares"
   }
 }
