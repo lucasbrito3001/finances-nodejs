@@ -25,7 +25,7 @@ const transactionsController = {
     },
 
     returnUserTransactions: async function (req, res) {
-        const userTransactions = await this.getUserTransactionsInDb(req, res)
+        const userTransactions = await transactionsController.getUserTransactionsInDb(req, res);
         return res.status(200).json({
             status: 200,
             data: userTransactions,
@@ -58,6 +58,16 @@ const transactionsController = {
     },
 
     createTransaction: async function (req, res) {
+        const userTransactions = await transactionsController.getUserTransactionsInDb(req, res);
+        let haveMoney = middlewares.checkIfHaveSufficientMoney(userTransactions, req, res);
+        if(!haveMoney) return res.status(406).json({
+            status: 406,
+            data: [],
+            message: "Você não tem saldo suficiente para realizar esta transação",
+            result: 'error',
+            error: "user don't have money to make this transaction"
+        })
+        console.log("TESTE")
         let status = 201;
         let data = [];
         let message = "Pedido de transação realizado!";
