@@ -1,4 +1,5 @@
 const transactionsModel = require("@models/transactionsModel.js");
+const middlewares = require('@middlewares/transactionsMiddlw')
 const { Op } = require('sequelize');
 
 const transactionsController = {
@@ -23,7 +24,18 @@ const transactionsController = {
         }
     },
 
-    getTransactions: async function (req, res) {
+    returnUserTransactions: async function (req, res) {
+        const userTransactions = await transactionsController.getUserTransactionsInDb(req, res);
+        return res.status(200).json({
+            status: 200,
+            data: userTransactions,
+            message: `Foram encontradas ${userTransactions.length} transações.`,
+            result: "success",
+            error: null
+        });
+    },
+
+    getUserTransactionsInDb: async function (req, res) {
         try {
             const matchedTransactions = await transactionsModel.transaction.findAll({
                 where: {
@@ -33,13 +45,7 @@ const transactionsController = {
                     ]
                 }
             });
-            return res.status(200).json({
-                status: 200,
-                data: matchedTransactions,
-                message: `Foram encontradas ${matchedTransactions.length} transações.`,
-                result: "success",
-                error: null
-            });
+            return matchedTransactions;
         } catch (error) {
             return res.status(404).json({
                 status: 404,
@@ -52,6 +58,16 @@ const transactionsController = {
     },
 
     createTransaction: async function (req, res) {
+        const userTransactions = await transactionsController.getUserTransactionsInDb(req, res);
+        let haveMoney = middlewares.checkIfHaveSufficientMoney(userTransactions, req, res);
+        if(!haveMoney) return res.status(406).json({
+            status: 406,
+            data: [],
+            message: "Você não tem saldo suficiente para realizar esta transação",
+            result: 'error',
+            error: "user don't have money to make this transaction"
+        })
+        console.log("TESTE")
         let status = 201;
         let data = [];
         let message = "Pedido de transação realizado!";

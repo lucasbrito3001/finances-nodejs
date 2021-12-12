@@ -5,7 +5,7 @@ const transactionsController = require('@controllers/transactionsController')
 
 router.get('/admin/all', transactionsController.getAllTransactions)
 
-router.get('/filter/account', transactionsController.getTransactions)
+router.get('/filter/account', transactionsController.returnUserTransactions)
 
 router.post('/new', transactionsController.createTransaction)
 
