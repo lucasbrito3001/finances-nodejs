@@ -1,22 +1,18 @@
-import * as res from "node_modules/express/lib/response"
-
 const middlewares = {
-    checkIfHaveSufficientMoney: function (userTransactions, newTransaction, res) {
-        const userBalance = userTransactions.reduce((prev, next) => {
-            if(next.transactionStatus === 'completed') {
-                if(next.transactionId === 2) prev + next.amount
-                else if(next.transactionId === 3) prev - next.amount
-            }
-        }, 0)
-        if(userBalance >= newTransaction.amount) return
-        else return res.status(406).json({
-            status: 406,
-            data: [],
-            message: "Você não tem saldo suficiente para realizar esta transação",
-            result: 'error',
-            error: "user don't have money to make this transaction"
-        });
+    checkIfHaveSufficientMoney: function (userTransactions, req, res) {
+        if(req.body.typeTransaction === 1 || req.body.typeTransaction === 4) return true
+        else {
+            const userBalance = userTransactions.reduce((prev, next) => {
+                if(next.transactionStatus === 'completed') {
+                    if(next.accountIdSender == req.query.accountId) return prev - next.amount
+                    else return prev + next.amount
+                }
+            }, 0)
+            console.log(userBalance)
+            if(userBalance >= req.body.amount) return true;
+            else return false;
+        }
     }
 }
 
-export default middlewares;
+module.exports = middlewares;
