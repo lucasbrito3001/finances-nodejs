@@ -60,6 +60,7 @@ const transactionsController = {
     createTransaction: async function (req, res) {
         const userTransactions = await transactionsController.getUserTransactionsInDb(req, res);
         let haveMoney = middlewares.checkIfHaveSufficientMoney(userTransactions, req, res);
+
         if(!haveMoney) return res.status(406).json({
             status: 406,
             data: [],
@@ -67,6 +68,7 @@ const transactionsController = {
             result: 'error',
             error: "user don't have money to make this transaction"
         })
+        
         console.log("TESTE")
         let status = 201;
         let data = [];

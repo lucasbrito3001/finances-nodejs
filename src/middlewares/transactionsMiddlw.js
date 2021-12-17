@@ -3,7 +3,7 @@ const middlewares = {
         if(req.body.typeTransaction === 1 || req.body.typeTransaction === 4) return true
         else {
             const userBalance = userTransactions.reduce((prev, next) => {
-                if(next.transactionStatus === 'completed') {
+                if(next.transactionStatus == 'completed') {
                     if(next.accountIdSender == req.query.accountId) return prev - next.amount
                     else return prev + next.amount
                 }
